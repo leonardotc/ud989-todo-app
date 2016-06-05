@@ -31,6 +31,10 @@ var app = app || {};
 		nextOrder: function () {
 			return this.length ? this.last().get('order') + 1 : 1;
 		},
+    
+    sortByPriority: function() {
+      return _.sortBy(this, function(el) { return el.priority; });
+    },
 
 		// Todos are sorted by their original insertion order.
 		comparator: 'order'

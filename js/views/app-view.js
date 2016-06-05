@@ -20,6 +20,7 @@ var app = app || {};
 		// Delegated events for creating new items, and clearing completed ones.
 		events: {
 			'keypress #new-todo': 'createOnEnter',
+			'keypress #new-priority': 'createOnEnter',
 			'click #clear-completed': 'clearCompleted',
 			'click #toggle-all': 'toggleAllComplete'
 		},
@@ -30,6 +31,7 @@ var app = app || {};
 		initialize: function () {
 			this.allCheckbox = this.$('#toggle-all')[0];
 			this.$input = this.$('#new-todo');
+			this.$select = this.$('#new-priority');
 			this.$footer = this.$('#footer');
 			this.$main = this.$('#main');
 			this.$list = $('#todo-list');
@@ -60,7 +62,6 @@ var app = app || {};
 					completed: completed,
 					remaining: remaining
 				}));
-
 				this.$('#filters li a')
 					.removeClass('selected')
 					.filter('[href="#/' + (app.TodoFilter || '') + '"]')
@@ -98,6 +99,7 @@ var app = app || {};
 		newAttributes: function () {
 			return {
 				title: this.$input.val().trim(),
+				priority: this.$select.val().trim(),
 				order: app.todos.nextOrder(),
 				completed: false
 			};

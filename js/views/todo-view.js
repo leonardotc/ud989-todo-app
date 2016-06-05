@@ -19,7 +19,6 @@ var app = app || {};
 		events: {
 			'click .toggle': 'toggleCompleted',
 			'dblclick label': 'edit',
-			'click .edit-btn': 'edit',
 			'click .destroy': 'clear',
 			'keypress .edit': 'updateOnEnter',
 			'keydown .edit': 'revertOnEscape',
@@ -51,19 +50,38 @@ var app = app || {};
 
 			this.$el.html(this.template(this.model.toJSON()));
 			this.$el.toggleClass('completed', this.model.get('completed'));
+			this.$el.addClass(this.getPriorityClass());
 			this.toggleVisible();
 			this.$input = this.$('.edit');
 			return this;
 		},
+    
+    getPriorityClass: function() {
+      switch(this.model.get('priority')) {
+        case '1':
+            return 'priority-1';
+            break;
+        case '2':
+            return 'priority-2';
+            break;
+        case '3':
+            return 'priority-3';
+            break;
+        case '4':
+            return 'priority-4';
+            break;
+        default:
+            return 'priority-0';
+      }
+    },
 
 		toggleVisible: function () {
 			this.$el.toggleClass('hidden', this.isHidden());
 		},
 
 		isHidden: function () {
-			return this.model.get('completed') ?
-				app.TodoFilter === 'active' :
-				app.TodoFilter === 'completed';
+      return (this.model.get('completed') ? app.TodoFilter === 'active' : app.TodoFilter === 'completed') || 
+        ((app.TodoFilter.indexOf('priority') > -1) && app.TodoFilter !== this.getPriorityClass(this.model.get('priority')));
 		},
 
 		// Toggle the `"completed"` state of the model.
